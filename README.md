@@ -1,8 +1,3 @@
-Below is a clean, production‑ready README.md generated from your comment‑docs.
-No emojis, no fluff, no filler.
-Structured, professional, and GitHub‑ready.
-
-Guided Links are included naturally on key terms so you can jump into deeper follow‑ups whenever you want.
 ModuleLoader
 
 A lightweight, typed‑checked module loader for Roblox.
@@ -149,11 +144,6 @@ Versioning Format
     Second digit: incremented for bug fixes and updates
 
     Third digit: incremented per script change or major type addition
-
-If you want, I can also generate:
-
-    A minimal quick‑start version
-
     A full API reference version
 
     A version with code examples for each method
