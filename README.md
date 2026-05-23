@@ -17,11 +17,12 @@ StarterPlayer > StarterPlayerScripts
 Recommended name: Client.
 3. Initialization Snippet
 
+```lua
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ModuleLoader = require(ReplicatedStorage.Shared.Utilities.ModuleLoader)
 
 ModuleLoader.new(script):loadAllModules()
-
+```
 Datatypes
 Utility Methods
 
@@ -144,7 +145,3 @@ Versioning Format
     Second digit: incremented for bug fixes and updates
 
     Third digit: incremented per script change or major type addition
-    A full API reference version
-
-    A version with code examples for each method
-    Just tell me which one you want next using generate quickstart or add examples.****
