@@ -3,6 +3,8 @@ Author : @Lazeyy_RBX
 Version : 0.2.1
 Date : 23/05/2026
 
+Github Repository : https://github.com/lazeyyyt-cell/ModuleLoader
+
 @IMPORTANT Version format :
 	1st number -> Changes based on 2nd digit,
 	2nd number -> Incremented based on bug fixes/updates,
