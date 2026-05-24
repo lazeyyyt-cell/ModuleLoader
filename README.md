@@ -1,21 +1,26 @@
-ModuleLoader
+# ModuleLoader
 
 A lightweight, typed‑checked module loader for Roblox.
 Version 0.2.1 — Documentation fully up to date.
 Overview
 
-The ModuleLoader provides a structured, predictable way to initialize and start ModuleScripts on both server and client. It supports typed fields, configurable init/start functions, tagged module discovery, and runtime setters/getters.
-Getting Started
-1. Server Setup
+# DOCUMENTATION
+## Docs up to date for version 0.2.1
 
-Create a Script inside ServerScriptService.
-Recommended name: Server.
-2. Client Setup
+### 1/ Getting Started
 
-Create a LocalScript inside:
-StarterPlayer > StarterPlayerScripts
-Recommended name: Client.
-3. Initialization Snippet
+This section of the documentation will focus
+on getting you ready to use the module loader at a basic level.
+
+### 1.1 Server setup :
+	First create a Script in ServerScriptService
+	For better clarity i recommend naming this script "Server"
+
+Client setup :
+	LocalScript in StarterPlayer -> StarterPlayerScripts
+	For better clarity i recommend naming this script "Client"
+
+### 1.2 Initialization snippet for Server and Client : 
 
 ```lua
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -23,125 +28,169 @@ local ModuleLoader = require(ReplicatedStorage.Shared.Utilities.ModuleLoader)
 
 ModuleLoader.new(script):loadAllModules()
 ```
-Datatypes
-Utility Methods
+    
+### 2/ Datatypes
+This section of the documentation will focus on
+the datatypes of the module loader.
 
-    requireModules
-    Loops through and requires all ModuleScripts in self.modules. Returns nil if none.
+### 2.1 Utility functions :
 
-    initModule
-    Locates and initializes a single import.
+	@method requireModules
+	[
+		Loops through and requires all ModuleScripts contained in self.modules, returns nil if none.
+	]
+	
+	@method initModule
+	[
+		Locates and initializes a single import (more in 2.3).
+	]
+	
+	@method loadAllModules
+	[
+		Loops through and intializes all imports contained in self.imports.
+	]
 
-    loadAllModules
-    Initializes all imports contained in self.imports.
+### 2.2 Fields :
 
-Fields
-LOADER_CONFIG
+	@Table LOADER_CONFIG 
+	[
+		@String _InitFunction
+		@String _StartFunction
+		@String _FetchTag
+		@String _ForceLoadTag
+	
+		@Boolean VerboseLoading
+	]
 
-    _InitFunction (string)
+	@Script|Folder container
+	[
+		A script or folder that contains all of the modules for the loader to get.
+	]
+	
+	@String contextPrefix
+	[
+		A string used to print server and client logs using a prefix ([S]/[C])
+	]
+	
+	@Table imports
+	[
+		A table containing all of the required module imports (more in 2.3)
+	]
+	
+	@Table modules
+	[
+		A table containing all of the modules caught by the loader.
+	]
+	
+	[Deprecated] @Table loadedModules
+	[
+		A table containing all of the already loaded modules.
+	]
+	
+	@String _InitFunction
+	[
+		Extends @Attribute InitFunction
+		@Default : "Init"
+		
+		Defines the function the loader will use to initialize the module (more on InitFunctions in 2.4).
+	]
+	
+	@String _StartFunction
+	[
+		Extends @Attribute StartFunction
+		@Default : "Start"
+		
+		Defines the function the loader will use to start the module (more on StartFunctions in 2.4).
+	]
+	
+	@String _FetchTag
+	[
+		Extends @Attribute FetchTag
+		@Default : "LOAD_MODULE"
+		
+		Defines the tag the loader will use to catch modules tagged with said tag.
+	]
+	
+	@Boolean VerboseLoading
+	[
+		Extends @Attribute VerboseLoading
+		@Default : true
+		
+		Enables/Disables logs for the loader.
+	]
+	
+### 2.3 Imports :
 
-    _StartFunction (string)
+An import is the table returned by a module when it is required by the loader.
+Each import is essentially composed of two functions by default being the "Init" and "Start" functions.
+	
+All imports are printed to the output when @Boolean VerboseLoading is enabled, 
+it is a table containing all functions you indexed with the module table.
 
-    _FetchTag (string)
+### 2.4 InitFunctions and StartFunctions :
+	
+	The InitFunction is a function that is called when the module is required by the loader,
+	it is the first function that should be called only by the loader.
+	
+	The StartFunction is a function that is called when the module is initialized by the loader,
+	it is a function that needs to be called whenever the Init function is finished.
 
-    _ForceLoadTag (string)
+### 3/ Setters and Getters :
 
-    VerboseLoading (boolean)
+	Setters are used to overwrite data in the loader's fields at runtime.
+	
+	Getters are use to read data in loader's fields at runtime.
+	
+### 3.1 Setters
 
-Core Fields
+	@method setInitFunction 
+	[
+		sets the current init function to the one provided.
+	]
+	
+	@method setStartFunction 
+	[
+		sets the current start function to the one provided.
+	]
+	
+	@method setFetchTag 
+	[
+		sets the current @String fetch tag to the one provided.
+	]
 
-    container
-    Script or Folder containing all modules to load.
+### 3.2 Getters
 
-    contextPrefix
-    Prefix used for contextual logging such as [S] or [C].
-
-    imports
-    Table of all required module imports.
-
-    modules
-    Table of all modules discovered by the loader.
-
-    loadedModules (deprecated)
-    Previously loaded modules.
-
-Configurable Fields
-
-    _InitFunction
-    Default: "Init"
-    Defines the initialization function name.
-
-    _StartFunction
-    Default: "Start"
-    Defines the start function name.
-
-    _FetchTag
-    Default: "LOAD_MODULE"
-    Tag used to detect modules via CollectionService.
-
-    VerboseLoading
-    Default: true
-    Enables or disables loader logs.
-
-Imports
-
-An import is the table returned by a module when required.
-By default, imports contain two functions:
-
-    Init
-
-    Start
-
-When VerboseLoading is enabled, all imports are printed to output.
-InitFunctions and StartFunctions
-
-    InitFunction
-    Called when the module is required.
-    Should only be called by the loader.
-
-    StartFunction
-    Called after initialization.
-    Runs once Init has completed.
-
-Setters and Getters
-Setters
-
-    setInitFunction
-    Overrides the current init function name.
-
-    setStartFunction
-    Overrides the current start function name.
-
-    setFetchTag
-    Overrides the fetch tag used to detect modules.
-
-Getters
-
-    getModules
-    Returns all modules inside the loader’s container.
-
-    getContext
-    Returns the current context prefix.
-
-    getFunction
-    Returns a function by name.
-
-    getInitFunction
-    Returns the current init function name.
-
-    getStartFunction
-    Returns the current start function name.
-
-    getFetchTag
-    Returns the current fetch tag.
-
-    getTaggedModules
-    Returns all modules tagged with the current fetch tag.
-
-Versioning Format
-
-    First digit: changes based on second digit
-
-    Second digit: incremented for bug fixes and updates
-
-    Third digit: incremented per script change or major type addition
+	@method getModules
+	[
+		loops through and returns a table of all modules contained in the loaders container.
+	]
+	
+	@method getContext
+	[
+		returns the current context prefix using RunService.
+	]
+	
+	@method getFunction
+	[
+		returns the function associated with the name provided.
+	]
+	
+	@method getInitFunction
+	[
+		returns the current init function.
+	]
+	
+	@method getStartFunction
+	[
+		returns the current start function.
+	]
+	
+	@method getFetchTag
+	[
+		returns the current fetch tag.
+	]
+	
+	@method getTaggedModules
+	[
+		returns a table of all modules tagged with the current fetch tag using CollectionService.
+	]
